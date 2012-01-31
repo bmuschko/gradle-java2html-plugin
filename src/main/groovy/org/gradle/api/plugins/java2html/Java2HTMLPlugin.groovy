@@ -28,10 +28,12 @@ import org.gradle.api.plugins.JavaPlugin
  */
 class Java2HTMLPlugin implements Plugin<Project> {
     static final String CONFIGURATION_NAME = 'java2html'
-    static final String TASK_NAME = 'java2html'
+    static final String CONVERT_CODE_TASK_NAME = 'java2htmlConvertCode'
+    static final String GENERATE_OVERVIEW_TASK_NAME = 'java2htmlGenerateOverview'
     static final String DOCUMENTATION_GROUP = 'documentation'
     static final String DEFAULT_JAVA_FILE_PATTERN = '**/*.java'
     static final String DEFAULT_GROOVY_FILE_PATTERN = '**/*.groovy'
+    static final String DEFAULT_DOCS_DIR = 'docs/java2html'
 
     @Override
     void apply(Project project) {
@@ -41,38 +43,78 @@ class Java2HTMLPlugin implements Plugin<Project> {
         Java2HTMLPluginConvention java2HTMLPluginConvention = new Java2HTMLPluginConvention()
         project.convention.plugins.java2html = java2HTMLPluginConvention
 
-        configureJava2HTMLTask(project, java2HTMLPluginConvention)
+        configureConvertCodeTask(project, java2HTMLPluginConvention)
+        configureGenerateOverviewTask(project, java2HTMLPluginConvention)
     }
 
-    private void configureJava2HTMLTask(Project project, Java2HTMLPluginConvention java2HTMLPluginConvention) {
-        project.tasks.withType(Java2HTMLTask).whenTaskAdded { Java2HTMLTask java2HTMLTask ->
-            java2HTMLTask.conventionMapping.map('classpath') { project.configurations.getByName(CONFIGURATION_NAME).asFileTree }
-            java2HTMLTask.conventionMapping.map('srcDirs') { getSrcDirs(project) }
-            java2HTMLTask.conventionMapping.map('destDir') { java2HTMLPluginConvention.destDir ?: new File(project.docsDir, 'java2html') }
-            java2HTMLTask.conventionMapping.map('includes') { java2HTMLPluginConvention.includes ?: "$DEFAULT_JAVA_FILE_PATTERN,$DEFAULT_GROOVY_FILE_PATTERN".toString() }
-            java2HTMLTask.conventionMapping.map('outputFormat') { java2HTMLPluginConvention.outputFormat ?: 'html' }
-            java2HTMLTask.conventionMapping.map('tabs') { java2HTMLPluginConvention.tabs ?: 2 }
-            java2HTMLTask.conventionMapping.map('style') { java2HTMLPluginConvention.style ?: 'eclipse' }
-            java2HTMLTask.conventionMapping.map('showLineNumbers') { java2HTMLPluginConvention.showLineNumbers ?: true }
-            java2HTMLTask.conventionMapping.map('showFileName') { java2HTMLPluginConvention.showFileName ?: false }
-            java2HTMLTask.conventionMapping.map('showDefaultTitle') { java2HTMLPluginConvention.showDefaultTitle ?: false }
-            java2HTMLTask.conventionMapping.map('showTableBorder') { java2HTMLPluginConvention.showTableBorder ?: false }
-            java2HTMLTask.conventionMapping.map('includeDocumentHeader') { java2HTMLPluginConvention.includeDocumentHeader ?: true }
-            java2HTMLTask.conventionMapping.map('includeDocumentFooter') { java2HTMLPluginConvention.includeDocumentFooter ?: true }
-            java2HTMLTask.conventionMapping.map('addLineAnchors') { java2HTMLPluginConvention.addLineAnchors ?: false }
-            java2HTMLTask.conventionMapping.map('lineAnchorPrefix') { java2HTMLPluginConvention.lineAnchorPrefix ?: '' }
-            java2HTMLTask.conventionMapping.map('horizontalAlignment') { java2HTMLPluginConvention.horizontalAlignment ?: 'left' }
-            java2HTMLTask.conventionMapping.map('useShortFileName') { java2HTMLPluginConvention.useShortFileName ?: false }
-            java2HTMLTask.conventionMapping.map('overwrite') { java2HTMLPluginConvention.overwrite ?: false }
+    private void configureConvertCodeTask(Project project, Java2HTMLPluginConvention java2HTMLPluginConvention) {
+        project.tasks.withType(ConvertCodeTask).whenTaskAdded { ConvertCodeTask convertCodeTask ->
+            convertCodeTask.conventionMapping.map('classpath') { project.configurations.getByName(CONFIGURATION_NAME).asFileTree }
+            convertCodeTask.conventionMapping.map('srcDirs') { getSrcDirs(project) }
+            convertCodeTask.conventionMapping.map('destDir') { getReportDirectory(project, java2HTMLPluginConvention.conversion.destDir) }
+            convertCodeTask.conventionMapping.map('includes') { java2HTMLPluginConvention.conversion.includes ?: getDefaultIncludes() }
+            convertCodeTask.conventionMapping.map('outputFormat') { java2HTMLPluginConvention.conversion.outputFormat ?: 'html' }
+            convertCodeTask.conventionMapping.map('tabs') { java2HTMLPluginConvention.conversion.tabs ?: 2 }
+            convertCodeTask.conventionMapping.map('style') { java2HTMLPluginConvention.conversion.style ?: 'eclipse' }
+            convertCodeTask.conventionMapping.map('showLineNumbers') { java2HTMLPluginConvention.conversion.showLineNumbers ?: true }
+            convertCodeTask.conventionMapping.map('showFileName') { java2HTMLPluginConvention.conversion.showFileName ?: false }
+            convertCodeTask.conventionMapping.map('showDefaultTitle') { java2HTMLPluginConvention.conversion.showDefaultTitle ?: false }
+            convertCodeTask.conventionMapping.map('showTableBorder') { java2HTMLPluginConvention.conversion.showTableBorder ?: false }
+            convertCodeTask.conventionMapping.map('includeDocumentHeader') { java2HTMLPluginConvention.conversion.includeDocumentHeader ?: true }
+            convertCodeTask.conventionMapping.map('includeDocumentFooter') { java2HTMLPluginConvention.conversion.includeDocumentFooter ?: true }
+            convertCodeTask.conventionMapping.map('addLineAnchors') { java2HTMLPluginConvention.conversion.addLineAnchors ?: false }
+            convertCodeTask.conventionMapping.map('lineAnchorPrefix') { java2HTMLPluginConvention.conversion.lineAnchorPrefix ?: '' }
+            convertCodeTask.conventionMapping.map('horizontalAlignment') { java2HTMLPluginConvention.conversion.horizontalAlignment ?: 'left' }
+            convertCodeTask.conventionMapping.map('useShortFileName') { java2HTMLPluginConvention.conversion.useShortFileName ?: false }
+            convertCodeTask.conventionMapping.map('overwrite') { java2HTMLPluginConvention.conversion.overwrite ?: false }
         }
 
         project.afterEvaluate {
-            if(hasJavaPlugin(project) || hasGroovyPlugin(project)) {
-                Java2HTMLTask java2HTMLTask = project.tasks.add(TASK_NAME, Java2HTMLTask)
-                java2HTMLTask.description = 'Generates Java2HTML documentation for the main source code.'
-                java2HTMLTask.group = DOCUMENTATION_GROUP
+            if(isTaskExposureAllowed(project)) {
+                ConvertCodeTask convertCodeTask = project.tasks.add(CONVERT_CODE_TASK_NAME, ConvertCodeTask)
+                convertCodeTask.description = 'Converts source code to Java2HTML documentation for the main source code.'
+                convertCodeTask.group = DOCUMENTATION_GROUP
             }
         }
+    }
+
+    private void configureGenerateOverviewTask(Project project, Java2HTMLPluginConvention java2HTMLPluginConvention) {
+        project.tasks.withType(GenerateOverviewTask).whenTaskAdded { GenerateOverviewTask generateOverviewTask ->
+            generateOverviewTask.conventionMapping.map('srcDirs') { java2HTMLPluginConvention.overview.srcDirs ?: getOverviewSourceDirectories(project, java2HTMLPluginConvention.conversion.destDir) }
+            generateOverviewTask.conventionMapping.map('destDir') { getReportDirectory(project, java2HTMLPluginConvention.overview.destDir) }
+            generateOverviewTask.conventionMapping.map('pattern') { java2HTMLPluginConvention.overview.pattern ?: '**/*.html' }
+            generateOverviewTask.conventionMapping.map('windowTitle') { java2HTMLPluginConvention.overview.windowTitle ?: project.name }
+            generateOverviewTask.conventionMapping.map('docTitle') { java2HTMLPluginConvention.overview.docTitle ?: project.name }
+            generateOverviewTask.conventionMapping.map('docDescription') { java2HTMLPluginConvention.overview.docDescription }
+            generateOverviewTask.conventionMapping.map('icon') { java2HTMLPluginConvention.overview.icon }
+            generateOverviewTask.conventionMapping.map('stylesheet') { java2HTMLPluginConvention.overview.stylesheet }
+        }
+
+        project.afterEvaluate {
+            addGenerateOverviewTask(determineGenerateOverviewTaskProject(project))
+        }
+    }
+
+    /**
+     * Determines project to assign the generate overview task. If it's a multi-module build we only want to assign
+     * it to the root project.
+     *
+     * @param project Project
+     * @return Project
+     */
+    private Project determineGenerateOverviewTaskProject(Project project) {
+        (project == project.rootProject && project.subprojects.size() > 0) ? project.rootProject : project
+    }
+
+    /**
+     * Adds overview generation task to project.
+     *
+     * @param project Project
+     */
+    private void addGenerateOverviewTask(Project project) {
+        GenerateOverviewTask generateOverviewTask = project.tasks.add(GENERATE_OVERVIEW_TASK_NAME, GenerateOverviewTask)
+        generateOverviewTask.description = 'Generates Java2HTML index file.'
+        generateOverviewTask.group = DOCUMENTATION_GROUP
     }
 
     /**
@@ -96,6 +138,16 @@ class Java2HTMLPlugin implements Plugin<Project> {
     }
 
     /**
+     * Checks if task should be exposed based on preconditions.
+     *
+     * @param project Project
+     * @return Flag
+     */
+    private boolean isTaskExposureAllowed(Project project) {
+        hasJavaPlugin(project) || hasGroovyPlugin(project)
+    }
+
+    /**
      * Gets source directories based on the applied project plugins.
      *
      * @param project Project
@@ -108,5 +160,47 @@ class Java2HTMLPlugin implements Plugin<Project> {
         else if(hasJavaPlugin(project)) {
             return project.sourceSets.main.java.srcDirs
         }
+    }
+
+    /**
+     * Gets report directory.
+     *
+     * @param project Project
+     * @param conventionValue Convention value
+     * @return Report directory
+     */
+    private File getReportDirectory(Project project, File conventionValue) {
+        conventionValue ?: new File(project.buildDir, DEFAULT_DOCS_DIR)
+    }
+
+    /**
+     * Gets default includes.
+     *
+     * @return Includes
+     */
+    private String getDefaultIncludes() {
+        "$DEFAULT_JAVA_FILE_PATTERN,$DEFAULT_GROOVY_FILE_PATTERN".toString()
+    }
+
+    /**
+     * Gets overview source directories.
+     *
+     * @param project Project
+     * @param conventionValue Convention value
+     * @return Overview source directories
+     */
+    private List<File> getOverviewSourceDirectories(Project project, File conventionValue) {
+        def srcDirs = []
+        
+        if(project.subprojects.size() > 0) {
+            project.subprojects.each { Project subproject ->
+                srcDirs << getReportDirectory(subproject, conventionValue)
+            }
+        }
+        else {
+            srcDirs << getReportDirectory(project, conventionValue)
+        }
+
+        srcDirs
     }
 }

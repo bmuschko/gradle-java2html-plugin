@@ -15,26 +15,18 @@
  */
 package org.gradle.api.plugins.java2html
 
-import org.gradle.util.ConfigureUtil
-
 /**
- * Java2HTML plugin convention.
+ * Overview convention.
  *
  * @author Benjamin Muschko
  */
-class Java2HTMLPluginConvention {
-    ConversionConvention conversion = new ConversionConvention()
-    OverviewConvention overview = new OverviewConvention()
-
-    def java2html(Closure closure) {
-        ConfigureUtil.configure(closure, this)
-    }
-
-    def conversion(Closure closure) {
-        ConfigureUtil.configure(closure, conversion)
-    }
-
-    def overview(Closure closure) {
-        ConfigureUtil.configure(closure, overview)
-    }
+class OverviewConvention {
+    List<File> srcDirs
+    File destDir
+    String pattern
+    String windowTitle
+    String docTitle
+    String docDescription
+    File icon
+    File stylesheet
 }

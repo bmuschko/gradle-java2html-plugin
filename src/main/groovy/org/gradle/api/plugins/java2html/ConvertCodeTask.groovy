@@ -24,14 +24,14 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
 /**
- * Java2HTML report generation task.
+ * Java2HTML files documentation generation task.
  *
- * @author benjamin
+ * @author Benjamin Muschko
  */
 @Slf4j
-class Java2HTMLTask extends DefaultTask {
+class ConvertCodeTask extends DefaultTask {
     @InputFiles FileCollection classpath
-    Set<File> srcDirs
+    @InputFiles Set<File> srcDirs
     @OutputDirectory File destDir
     @Input String includes
     String outputFormat
@@ -55,7 +55,7 @@ class Java2HTMLTask extends DefaultTask {
     }
 
     private void generateReport() {
-        log.info 'Starting to generate Java2HTML documentation.'
+        log.info 'Starting to convert source code to Java2HTML documentation.'
 
         ant.taskdef(name: 'java2html', classname: 'de.java2html.anttasks.Java2HtmlTask', classpath: getClasspath().asPath)
         getSrcDirs().each { srcDir ->
@@ -66,6 +66,6 @@ class Java2HTMLTask extends DefaultTask {
                           useShortFileName: getUseShortFileName(), overwrite: getOverwrite())
         }
 
-        log.info 'Finished generating Java2HTML documentation.'
+        log.info 'Finished converting source code to Java2HTML documentation.'
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gradle.api.plugins.java2html
-
-import org.gradle.util.ConfigureUtil
+package org.gradle.api.plugins.java2html.internal
 
 /**
- * Java2HTML plugin convention.
+ * Document file enums.
  *
  * @author Benjamin Muschko
  */
-class Java2HTMLPluginConvention {
-    ConversionConvention conversion = new ConversionConvention()
-    OverviewConvention overview = new OverviewConvention()
+enum DocFile {
+    INDEX('index.html'), OVERVIEW_FRAME('overview-frame.html'), ALLCLASSES_FRAME('allclasses-frame.html'), OVERVIEW_SUMMARY('overview-summary.html'),
+    PACKAGE_FRAME('package-frame.html'), STYLESHEET('stylesheet.css'), ICON('doc.ico')
 
-    def java2html(Closure closure) {
-        ConfigureUtil.configure(closure, this)
-    }
+    final String filename
 
-    def conversion(Closure closure) {
-        ConfigureUtil.configure(closure, conversion)
-    }
-
-    def overview(Closure closure) {
-        ConfigureUtil.configure(closure, overview)
+    private DocFile(String filename) {
+        this.filename = filename
     }
 }

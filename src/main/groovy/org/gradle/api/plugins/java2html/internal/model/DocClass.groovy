@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,28 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gradle.api.plugins.java2html
-
-import org.gradle.util.ConfigureUtil
+package org.gradle.api.plugins.java2html.internal.model
 
 /**
- * Java2HTML plugin convention.
+ * Document class model.
  *
  * @author Benjamin Muschko
  */
-class Java2HTMLPluginConvention {
-    ConversionConvention conversion = new ConversionConvention()
-    OverviewConvention overview = new OverviewConvention()
+class DocClass implements Comparable {
+    String link
+    String name
 
-    def java2html(Closure closure) {
-        ConfigureUtil.configure(closure, this)
+    @Override
+    int compareTo(t) {
+        return this.name.compareTo(t.name)
     }
 
-    def conversion(Closure closure) {
-        ConfigureUtil.configure(closure, conversion)
-    }
-
-    def overview(Closure closure) {
-        ConfigureUtil.configure(closure, overview)
+    @Override
+    String toString() {
+        "DocClass{" +
+                "link='" + link + '\'' +
+                ", name='" + name + '\'' +
+                '}'
     }
 }
