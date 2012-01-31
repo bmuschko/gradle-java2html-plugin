@@ -1,7 +1,21 @@
 apply plugin: 'groovy'
 apply plugin: 'idea'
+apply plugin: 'java2html'
 
 version = '0.2'
+
+buildscript {
+    repositories {
+        add(new org.apache.ivy.plugins.resolver.URLResolver()) {
+            name = 'GitHub'
+            addArtifactPattern 'http://cloud.github.com/downloads/[organisation]/[module]/[module]-[revision].[ext]'
+        }
+    }
+
+    dependencies {
+        classpath 'bmuschko:gradle-java2html-plugin:0.2'
+    }
+}
 
 repositories {
     mavenCentral()
@@ -10,6 +24,27 @@ repositories {
 dependencies {
     groovy localGroovy()
     compile gradleApi()
+    java2html 'de.java2html:java2html:5.0'
+}
+
+java2html {
+    conversion {
+        tabs = 4
+        style = 'eclipse'
+        outputFormat = 'html'
+        showLineNumbers = true
+        addLineAnchors = true
+        showFileName = true
+        useShortFileName = true
+        overwrite = true
+        showDefaultTitle = true
+        includeDocumentHeader = true
+        includeDocumentFooter = true
+    }
+
+    overview {
+        docDescription = 'Gradle plugin for turning source code into HTML, RTF, TeX and XHTML using Java2HTML.'
+    }
 }
 
 jar {
