@@ -65,7 +65,7 @@ In the closure `conversion` you can define property values for converting the so
 * `useShortFileName`: Use short (`ClassName.html`) or long (`ClassName.java.html`) filenames for output (defaults to `false`).
 * `overwrite`: Overwrite existing files even if the destination files are newer (defaults to `false`).
 
-In the closure `conversion` you can define property values for generating the HTML overview files:
+In the closure `overview` you can define property values for generating the HTML overview files:
 
 * `srcDirs`: Source directories to look for generated files by Java2HTML (defaults to `file('build/docs/java2html')` of all modules
 in project).
