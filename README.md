@@ -26,7 +26,7 @@ configuration name in your `dependencies` closure.
         }
 
         dependencies {
-            classpath 'bmuschko:gradle-java2html-plugin:0.2'
+            classpath 'bmuschko:gradle-java2html-plugin:0.3'
         }
     }
 
@@ -48,6 +48,8 @@ two closures for each of the tasks: `conversion` and `overview`.
 
 In the closure `conversion` you can define property values for converting the source code:
 
+* `srcDirs`: Source directories to look for source code files for conversion (defaults to `file('src/main/java')` for a Java
+project and to `files('src/main/java', 'src/main/groovy')` for a Groovy project).
 * `destDir`: Destination folder for output of the converted files (defaults to `file('build/docs/java2html')`).
 * `includes`: File mask for input files (defaults to `**/*.java,**/*.groovy`).
 * `outputFormat`: File format for conversion output (defaults to `html`). Valid values are `html`, `xhtml11`, `xhtml`, `tex`, `rtf` and `xml`.

@@ -15,6 +15,7 @@
  */
 package org.gradle.api.plugins.java2html.internal
 
+import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.java2html.internal.model.DocClass
 import org.gradle.api.plugins.java2html.internal.model.DocPackage
 
@@ -33,7 +34,7 @@ class DocMetaDataExtractor {
      * @param srcDirs Source directories
      * @return Document classes
      */
-    List<DocClass> getClasses(List<String> htmlFilenames, List<File> srcDirs) {
+    List<DocClass> getClasses(List<String> htmlFilenames, FileCollection srcDirs) {
         def docClasses = []
 
         htmlFilenames.each {
@@ -52,7 +53,7 @@ class DocMetaDataExtractor {
      * @param srcDirs Source directories
      * @return Document packages
      */
-    List<DocPackage> getPackages(List<String> htmlFilenames, List<File> srcDirs) {
+    List<DocPackage> getPackages(List<String> htmlFilenames, FileCollection srcDirs) {
         def docPackages = []
 
         htmlFilenames.each {
@@ -75,7 +76,7 @@ class DocMetaDataExtractor {
      * @param srcDirs Source directories
      * @return Relative class file name
      */
-    private String getRelativeClassFilename(String htmlFilename, List<File> srcDirs) {
+    private String getRelativeClassFilename(String htmlFilename, FileCollection srcDirs) {
         String sourceDirPath = srcDirs.find { htmlFilename.startsWith(it.absolutePath) }
         String relativePathClassFilename = htmlFilename.replaceFirst(sourceDirPath, '')
 

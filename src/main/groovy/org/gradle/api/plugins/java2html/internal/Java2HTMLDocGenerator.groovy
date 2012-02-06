@@ -56,7 +56,7 @@ class Java2HTMLDocGenerator {
         generatePackageFrameFiles(docPackages, docClasses)
 
         if(isNotNullAndExists(docGenerationInput.stylesheet)) {
-            fileCopier.copyExternalFile(docGenerationInput.stylesheet, new File(docGenerationInput.stylesheet, DocFile.STYLESHEET.filename))
+            fileCopier.copyExternalFile(docGenerationInput.stylesheet, new File(docGenerationInput.destDir, DocFile.STYLESHEET.filename))
         }
         else {
             fileCopier.copyInternalFile(new File(getFullTemplateFilename(DocFile.STYLESHEET.filename)), new File(docGenerationInput.destDir, DocFile.STYLESHEET.filename))

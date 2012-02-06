@@ -15,13 +15,15 @@
  */
 package org.gradle.api.plugins.java2html.internal.model
 
+import org.gradle.api.file.FileCollection
+
 /**
  * Document generation input model.
  *
  * @author Benjamin Muschko
  */
 class DocGenerationInput {
-    List<File> srcDirs
+    FileCollection srcDirs
     File destDir
     String pattern
     String windowTitle

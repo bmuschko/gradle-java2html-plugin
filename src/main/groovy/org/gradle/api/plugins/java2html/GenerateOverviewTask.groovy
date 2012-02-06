@@ -20,6 +20,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.plugins.java2html.internal.Java2HTMLDocGenerator
 import org.gradle.api.plugins.java2html.internal.model.DocGenerationInput
 import org.gradle.api.tasks.*
+import org.gradle.api.file.FileCollection
 
 /**
  * Java2HTML overview generation task.
@@ -28,9 +29,9 @@ import org.gradle.api.tasks.*
  */
 @Slf4j
 class GenerateOverviewTask extends DefaultTask {
-    @Input List<File> srcDirs
+    @Input FileCollection srcDirs
     @OutputDirectory File destDir
-    String pattern = '**/*.html'
+    String pattern
     String windowTitle
     String docTitle
     String docDescription

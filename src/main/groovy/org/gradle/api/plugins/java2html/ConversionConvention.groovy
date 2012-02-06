@@ -15,12 +15,15 @@
  */
 package org.gradle.api.plugins.java2html
 
+import org.gradle.api.file.FileCollection
+
 /**
  * Conversion convention.
  *
  * @author Benjamin Muschko
  */
 class ConversionConvention {
+    FileCollection srcDirs
     File destDir
     String includes
     String outputFormat
@@ -37,4 +40,29 @@ class ConversionConvention {
     String horizontalAlignment
     Boolean useShortFileName
     Boolean overwrite
+
+    @Override
+    public String toString() {
+        return "ConversionConvention{" +
+                "srcDirs=" + srcDirs +
+                ", destDir=" + destDir +
+                ", includes='" + includes + '\'' +
+                ", outputFormat='" + outputFormat + '\'' +
+                ", tabs=" + tabs +
+                ", style='" + style + '\'' +
+                ", showLineNumbers=" + showLineNumbers +
+                ", showFileName=" + showFileName +
+                ", showDefaultTitle=" + showDefaultTitle +
+                ", showTableBorder=" + showTableBorder +
+                ", includeDocumentHeader=" + includeDocumentHeader +
+                ", includeDocumentFooter=" + includeDocumentFooter +
+                ", addLineAnchors=" + addLineAnchors +
+                ", lineAnchorPrefix='" + lineAnchorPrefix + '\'' +
+                ", horizontalAlignment='" + horizontalAlignment + '\'' +
+                ", useShortFileName=" + useShortFileName +
+                ", overwrite=" + overwrite +
+                '}';
+    }
+
+
 }

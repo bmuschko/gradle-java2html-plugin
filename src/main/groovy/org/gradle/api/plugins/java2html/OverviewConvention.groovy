@@ -15,13 +15,15 @@
  */
 package org.gradle.api.plugins.java2html
 
+import org.gradle.api.file.FileCollection
+
 /**
  * Overview convention.
  *
  * @author Benjamin Muschko
  */
 class OverviewConvention {
-    List<File> srcDirs
+    FileCollection srcDirs
     File destDir
     String pattern
     String windowTitle

@@ -31,7 +31,7 @@ import org.gradle.api.tasks.TaskAction
 @Slf4j
 class ConvertCodeTask extends DefaultTask {
     @InputFiles FileCollection classpath
-    @InputFiles Set<File> srcDirs
+    @Input FileCollection srcDirs
     @OutputDirectory File destDir
     @Input String includes
     String outputFormat

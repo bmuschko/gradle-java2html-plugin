@@ -17,6 +17,7 @@ package org.gradle.api.plugins.java2html
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.GroovyPlugin
 import org.gradle.api.plugins.JavaPlugin
 
@@ -50,7 +51,7 @@ class Java2HTMLPlugin implements Plugin<Project> {
     private void configureConvertCodeTask(Project project, Java2HTMLPluginConvention java2HTMLPluginConvention) {
         project.tasks.withType(ConvertCodeTask).whenTaskAdded { ConvertCodeTask convertCodeTask ->
             convertCodeTask.conventionMapping.map('classpath') { project.configurations.getByName(CONFIGURATION_NAME).asFileTree }
-            convertCodeTask.conventionMapping.map('srcDirs') { getSrcDirs(project) }
+            convertCodeTask.conventionMapping.map('srcDirs') { java2HTMLPluginConvention.conversion.srcDirs ?: getSrcDirs(project) }
             convertCodeTask.conventionMapping.map('destDir') { getReportDirectory(project, java2HTMLPluginConvention.conversion.destDir) }
             convertCodeTask.conventionMapping.map('includes') { java2HTMLPluginConvention.conversion.includes ?: getDefaultIncludes() }
             convertCodeTask.conventionMapping.map('outputFormat') { java2HTMLPluginConvention.conversion.outputFormat ?: 'html' }
@@ -69,13 +70,9 @@ class Java2HTMLPlugin implements Plugin<Project> {
             convertCodeTask.conventionMapping.map('overwrite') { java2HTMLPluginConvention.conversion.overwrite ?: false }
         }
 
-        project.afterEvaluate {
-            if(isTaskExposureAllowed(project)) {
-                ConvertCodeTask convertCodeTask = project.tasks.add(CONVERT_CODE_TASK_NAME, ConvertCodeTask)
-                convertCodeTask.description = 'Converts source code to Java2HTML documentation for the main source code.'
-                convertCodeTask.group = DOCUMENTATION_GROUP
-            }
-        }
+        ConvertCodeTask convertCodeTask = project.tasks.add(CONVERT_CODE_TASK_NAME, ConvertCodeTask)
+        convertCodeTask.description = 'Converts source code to Java2HTML documentation for the main source code.'
+        convertCodeTask.group = DOCUMENTATION_GROUP
     }
 
     private void configureGenerateOverviewTask(Project project, Java2HTMLPluginConvention java2HTMLPluginConvention) {
@@ -138,28 +135,20 @@ class Java2HTMLPlugin implements Plugin<Project> {
     }
 
     /**
-     * Checks if task should be exposed based on preconditions.
-     *
-     * @param project Project
-     * @return Flag
-     */
-    private boolean isTaskExposureAllowed(Project project) {
-        hasJavaPlugin(project) || hasGroovyPlugin(project)
-    }
-
-    /**
      * Gets source directories based on the applied project plugins.
      *
      * @param project Project
      * @return Source directories
      */
-    private Set<File> getSrcDirs(Project project) {
+    private FileCollection getSrcDirs(Project project) {
         if(hasGroovyPlugin(project)) {
-            return project.sourceSets.main.groovy.srcDirs
+            return project.files(project.sourceSets.main.groovy.srcDirs)
         }
         else if(hasJavaPlugin(project)) {
-            return project.sourceSets.main.java.srcDirs
+            return project.files(project.sourceSets.main.java.srcDirs)
         }
+        
+        project.files()
     }
 
     /**
@@ -189,16 +178,16 @@ class Java2HTMLPlugin implements Plugin<Project> {
      * @param conventionValue Convention value
      * @return Overview source directories
      */
-    private List<File> getOverviewSourceDirectories(Project project, File conventionValue) {
-        def srcDirs = []
+    private FileCollection getOverviewSourceDirectories(Project project, File conventionValue) {
+        def srcDirs = project.files()
         
         if(project.subprojects.size() > 0) {
             project.subprojects.each { Project subproject ->
-                srcDirs << getReportDirectory(subproject, conventionValue)
+                srcDirs += project.files(getReportDirectory(subproject, conventionValue))
             }
         }
         else {
-            srcDirs << getReportDirectory(project, conventionValue)
+            srcDirs += project.files(getReportDirectory(project, conventionValue))
         }
 
         srcDirs
