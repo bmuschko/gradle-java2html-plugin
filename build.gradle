@@ -13,7 +13,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'bmuschko:gradle-java2html-plugin:0.2'
+        classpath 'bmuschko:gradle-java2html-plugin:0.3'
     }
 }
 
