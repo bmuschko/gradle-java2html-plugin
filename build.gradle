@@ -8,15 +8,11 @@ version = '0.3'
 
 buildscript {
     repositories {
-        add(new org.apache.ivy.plugins.resolver.URLResolver()) {
-            name = 'GitHub'
-            addArtifactPattern 'http://cloud.github.com/downloads/[organisation]/[module]/[module]-[revision].[ext]'
-        }
         mavenCentral()
     }
 
     dependencies {
-        classpath 'bmuschko:gradle-java2html-plugin:0.3'
+        classpath 'org.gradle.api.plugins:gradle-java2html-plugin:0.3'
         classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.2'
     }
 }
