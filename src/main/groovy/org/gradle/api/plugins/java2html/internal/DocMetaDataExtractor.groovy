@@ -59,7 +59,7 @@ class DocMetaDataExtractor {
         htmlFilenames.each {
             String relativePathClassFilename = getRelativeClassFilename(it, srcDirs)
             String packageName = relativePathClassFilename.substring(0, relativePathClassFilename.lastIndexOf(FILE_SEPARATOR))
-            DocPackage docPackage = new DocPackage(link: packageName, name: packageName.replaceAll(FILE_SEPARATOR, '.'))
+            DocPackage docPackage = new DocPackage(link: packageName, name: packageName.replaceAll(FILE_SEPARATOR.replace("\\", "\\\\"), '.'))
 
             if(!docPackages.contains(docPackage)) {
                 docPackages << docPackage
@@ -78,10 +78,10 @@ class DocMetaDataExtractor {
      */
     private String getRelativeClassFilename(String htmlFilename, FileCollection srcDirs) {
         String sourceDirPath = srcDirs.find { htmlFilename.startsWith(it.absolutePath) }
-        String relativePathClassFilename = htmlFilename.replaceFirst(sourceDirPath, '')
+        String relativePathClassFilename = htmlFilename.replaceFirst(sourceDirPath.replace("\\", "\\\\"), '')
 
         if(relativePathClassFilename.startsWith(FILE_SEPARATOR)) {
-            relativePathClassFilename = relativePathClassFilename.replaceFirst(FILE_SEPARATOR, '')
+            relativePathClassFilename = relativePathClassFilename.replaceFirst(FILE_SEPARATOR.replace("\\", "\\\\"), '')
         }
 
         relativePathClassFilename
