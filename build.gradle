@@ -4,7 +4,7 @@ apply plugin: 'nexus'
 apply plugin: 'java2html'
 
 group = 'org.gradle.api.plugins'
-version = '0.3'
+version = '0.3-windows-fix'
 
 buildscript {
     repositories {
