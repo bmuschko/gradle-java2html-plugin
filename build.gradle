@@ -60,6 +60,21 @@ jar {
     }
 }
 
+task sourcesJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+task groovydocJar(type: Jar, dependsOn: groovydoc) {
+    classifier 'groovydoc'
+    from groovydoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives groovydocJar
+}
+
 idea.project {
     jdkName = '1.6'
 
@@ -84,6 +99,8 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+            artifact sourcesJar
+            artifact groovydocJar
 
             pom.withXml {
                 def root = asNode()
