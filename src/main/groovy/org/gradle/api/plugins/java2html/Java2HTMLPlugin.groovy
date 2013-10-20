@@ -38,7 +38,7 @@ class Java2HTMLPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.configurations.add(CONFIGURATION_NAME).setVisible(false).setTransitive(true)
+        project.configurations.create(CONFIGURATION_NAME).setVisible(false).setTransitive(true)
                .setDescription('The Java2HTML library to be used for this project.')
 
         Java2HTMLPluginConvention java2HTMLPluginConvention = new Java2HTMLPluginConvention()
@@ -70,7 +70,7 @@ class Java2HTMLPlugin implements Plugin<Project> {
             convertCodeTask.conventionMapping.map('overwrite') { java2HTMLPluginConvention.conversion.overwrite ?: false }
         }
 
-        ConvertCodeTask convertCodeTask = project.tasks.add(CONVERT_CODE_TASK_NAME, ConvertCodeTask)
+        ConvertCodeTask convertCodeTask = project.tasks.create(CONVERT_CODE_TASK_NAME, ConvertCodeTask)
         convertCodeTask.description = 'Converts source code to Java2HTML documentation for the main source code.'
         convertCodeTask.group = DOCUMENTATION_GROUP
     }
@@ -109,7 +109,7 @@ class Java2HTMLPlugin implements Plugin<Project> {
      * @param project Project
      */
     private void addGenerateOverviewTask(Project project) {
-        GenerateOverviewTask generateOverviewTask = project.tasks.add(GENERATE_OVERVIEW_TASK_NAME, GenerateOverviewTask)
+        GenerateOverviewTask generateOverviewTask = project.tasks.create(GENERATE_OVERVIEW_TASK_NAME, GenerateOverviewTask)
         generateOverviewTask.description = 'Generates Java2HTML index file.'
         generateOverviewTask.group = DOCUMENTATION_GROUP
     }

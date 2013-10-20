@@ -23,10 +23,7 @@ import org.junit.Test
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 
-import static org.junit.Assert.assertEquals
-
 class DocMetaDataExtractorTest {
-
     @Test
     public void testGetClassesWindowsPath() {
         def htmlFileNames = [
@@ -39,25 +36,27 @@ class DocMetaDataExtractorTest {
         fileMock.ignore('getAbsolutePath') { "C:\\Users\\Jocki Hendry\\project name\\build\\java2html" }
         fileMock.ignore('toString') { "C:\\Users\\Jocki Hendry\\project name\\build\\java2html" }
         fileMock.ignore('path') { "C:\\Users\\Jocki Hendry\\project name\\build\\java2html" }
-        fileMock.use {
 
+        fileMock.use {
             File srcFile = new File("")
             def fileCollectionMock = new MockFor(FileCollection)
+
             fileCollectionMock.demand.find(3) {
                 srcFile.toString()
             }
+
             FileCollection fileCollection = fileCollectionMock.proxyInstance()
 
             DocMetaDataExtractor docMetaDataExtractor = new DocMetaDataExtractor()
             changeFileSeparator('\\')
             def results = docMetaDataExtractor.getClasses(htmlFileNames, fileCollection)
 
-            assertEquals "AbstractSyntheticMetaMethods", results[0].name
-            assertEquals "griffon\\app\\AbstractSyntheticMetaMethods.html", results[0].link
-            assertEquals "AddonManager", results[1].name
-            assertEquals "griffon\\core\\AddonManager.html", results[1].link
-            assertEquals "StandaloneGriffonApplication", results[2].name
-            assertEquals "griffon\\application\\StandaloneGriffonApplication.html", results[2].link
+            assert "AbstractSyntheticMetaMethods" == results[0].name
+            assert "griffon\\app\\AbstractSyntheticMetaMethods.html" == results[0].link
+            assert "AddonManager" == results[1].name
+            assert "griffon\\core\\AddonManager.html" == results[1].link
+            assert "StandaloneGriffonApplication" == results[2].name
+            assert "griffon\\application\\StandaloneGriffonApplication.html" == results[2].link
         }
     }
 
@@ -73,25 +72,27 @@ class DocMetaDataExtractorTest {
         fileMock.ignore('getAbsolutePath') { "/home/jocki/project/build/java2html" }
         fileMock.ignore('toString') { "/home/jocki/project/build/java2html" }
         fileMock.ignore('path') { "/home/jocki/project/build/java2html" }
-        fileMock.use {
 
+        fileMock.use {
             File srcFile = new File("")
             def fileCollectionMock = new MockFor(FileCollection)
+
             fileCollectionMock.demand.find(3) {
                 srcFile.toString()
             }
+
             FileCollection fileCollection = fileCollectionMock.proxyInstance()
 
             DocMetaDataExtractor docMetaDataExtractor = new DocMetaDataExtractor()
             changeFileSeparator('/')
             def results = docMetaDataExtractor.getClasses(htmlFileNames, fileCollection)
 
-            assertEquals "AbstractSyntheticMetaMethods", results[0].name
-            assertEquals "griffon/app/AbstractSyntheticMetaMethods.html", results[0].link
-            assertEquals "AddonManager", results[1].name
-            assertEquals "griffon/core/AddonManager.html", results[1].link
-            assertEquals "StandaloneGriffonApplication", results[2].name
-            assertEquals "griffon/application/StandaloneGriffonApplication.html", results[2].link
+            assert "AbstractSyntheticMetaMethods" == results[0].name
+            assert "griffon/app/AbstractSyntheticMetaMethods.html" == results[0].link
+            assert "AddonManager" == results[1].name
+            assert "griffon/core/AddonManager.html" == results[1].link
+            assert "StandaloneGriffonApplication" == results[2].name
+            assert "griffon/application/StandaloneGriffonApplication.html" == results[2].link
         }
 
     }
@@ -108,25 +109,27 @@ class DocMetaDataExtractorTest {
         fileMock.ignore('getAbsolutePath') { "C:\\Users\\Jocki Hendry\\project name\\build\\java2html" }
         fileMock.ignore('toString') { "C:\\Users\\Jocki Hendry\\project name\\build\\java2html" }
         fileMock.ignore('path') { "C:\\Users\\Jocki Hendry\\project name\\build\\java2html" }
-        fileMock.use {
 
+        fileMock.use {
             File srcFile = new File("")
             def fileCollectionMock = new MockFor(FileCollection)
+
             fileCollectionMock.demand.find(3) {
                 srcFile.toString()
             }
+
             FileCollection fileCollection = fileCollectionMock.proxyInstance()
 
             DocMetaDataExtractor docMetaDataExtractor = new DocMetaDataExtractor()
             changeFileSeparator('\\')
             def results = docMetaDataExtractor.getPackages(htmlFileNames, fileCollection)
 
-            assertEquals "griffon.app", results[0].name
-            assertEquals "griffon\\app", results[0].link
-            assertEquals "griffon.application", results[1].name
-            assertEquals "griffon\\application", results[1].link
-            assertEquals "griffon.core", results[2].name
-            assertEquals "griffon\\core", results[2].link
+            assert "griffon.app" == results[0].name
+            assert "griffon\\app" == results[0].link
+            assert "griffon.application" == results[1].name
+            assert "griffon\\application" == results[1].link
+            assert "griffon.core" == results[2].name
+            assert "griffon\\core" == results[2].link
         }
     }
 
@@ -142,30 +145,32 @@ class DocMetaDataExtractorTest {
         fileMock.ignore('getAbsolutePath') { "/home/jocki/project/build/java2html" }
         fileMock.ignore('toString') { "/home/jocki/project/build/java2html" }
         fileMock.ignore('path') { "/home/jocki/project/build/java2html" }
-        fileMock.use {
 
+        fileMock.use {
             File srcFile = new File("")
             def fileCollectionMock = new MockFor(FileCollection)
+
             fileCollectionMock.demand.find(3) {
                 srcFile.toString()
             }
+
             FileCollection fileCollection = fileCollectionMock.proxyInstance()
 
             DocMetaDataExtractor docMetaDataExtractor = new DocMetaDataExtractor()
             changeFileSeparator('/')
             def results = docMetaDataExtractor.getPackages(htmlFileNames, fileCollection)
 
-            assertEquals "griffon.app", results[0].name
-            assertEquals "griffon/app", results[0].link
-            assertEquals "griffon.application", results[1].name
-            assertEquals "griffon/application", results[1].link
-            assertEquals "griffon.core", results[2].name
-            assertEquals "griffon/core", results[2].link
+            assert "griffon.app" == results[0].name
+            assert "griffon/app" == results[0].link
+            assert "griffon.application" == results[1].name
+            assert "griffon/application" == results[1].link
+            assert "griffon.core" == results[2].name
+            assert "griffon/core" == results[2].link
         }
 
     }
 
-    public void changeFileSeparator(String newSeparator) {
+    private void changeFileSeparator(String newSeparator) {
         Field field = DocMetaDataExtractor.getDeclaredField('FILE_SEPARATOR')
         field.accessible = true
         Field modifiers = Field.getDeclaredField('modifiers')
@@ -173,5 +178,4 @@ class DocMetaDataExtractorTest {
         modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL)
         field.set(null, newSeparator)
     }
-
 }

@@ -1,29 +1,32 @@
-apply plugin: 'groovy'
-apply plugin: 'idea'
-apply plugin: 'nexus'
-apply plugin: 'java2html'
-
-group = 'org.gradle.api.plugins'
-version = '0.3-windows-fix'
-
 buildscript {
     repositories {
         mavenCentral()
+        maven { url 'http://jcenter.bintray.com' }
     }
 
     dependencies {
         classpath 'org.gradle.api.plugins:gradle-java2html-plugin:0.3'
-        classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.2'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
     }
 }
+
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'maven-publish'
+apply plugin: 'bintray'
+apply plugin: 'java2html'
+
+group = 'org.gradle.api.plugins'
+version = '0.4'
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    groovy localGroovy()
+    compile localGroovy()
     compile gradleApi()
+    testCompile 'junit:junit:4.11'
     java2html 'de.java2html:java2html:5.0'
 }
 
@@ -74,36 +77,49 @@ idea.project {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.3'
+    gradleVersion = '1.7'
 }
 
-modifyPom {
-    project {
-        name 'Gradle Java2HTML plugin'
-        description 'Gradle plugin for turning source code into HTML, RTF, TeX and XHTML using Java2HTML.'
-        url 'https://github.com/bmuschko/gradle-java2html-plugin'
-        inceptionYear '2012'
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
 
-        scm {
-            url 'https://github.com/bmuschko/gradle-java2html-plugin'
-            connection 'scm:https://bmuschko@github.com/bmuschko/gradle-java2html-plugin.git'
-            developerConnection 'scm:git://github.com/bmuschko/gradle-java2html-plugin.git'
-        }
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('name', 'Gradle Java2HTML plugin')
+                root.appendNode('description', 'Gradle plugin for turning source code into HTML, RTF, TeX and XHTML using Java2HTML.')
+                root.appendNode('url', 'https://github.com/bmuschko/gradle-java2html-plugin')
+                root.appendNode('inceptionYear', '2012')
 
-        licenses {
-            license {
-                name 'The Apache Software License, Version 2.0'
-                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                distribution 'repo'
+                def scm = root.appendNode('scm')
+                scm.appendNode('url', 'https://github.com/bmuschko/gradle-java2html-plugin')
+                scm.appendNode('connection', 'scm:https://bmuschko@github.com/bmuschko/gradle-java2html-plugin.git')
+                scm.appendNode('developerConnection', 'scm:git://github.com/bmuschko/gradle-java2html-plugin.git')
+
+                def license = root.appendNode('licenses').appendNode('license')
+                license.appendNode('name', 'The Apache Software License, Version 2.0')
+                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
+                license.appendNode('distribution', 'repo')
+
+                def developers = root.appendNode('developers')
+                def bmuschko = developers.appendNode('developer')
+                bmuschko.appendNode('id', 'bmuschko')
+                bmuschko.appendNode('name', 'Benjamin Muschko')
+                bmuschko.appendNode('email', 'benjamin.muschko@gmail.com')
             }
         }
+    }
+}
 
-        developers {
-            developer {
-                id 'bmuschko'
-                name 'Benjamin Muschko'
-                email 'benjamin.muschko@gmail.com'
-            }
-        }
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.getProperty('bintrayUser') : null
+    key =  project.hasProperty('bintrayKey') ? project.getProperty('bintrayKey') : null
+    publications = ['mavenJava']
+
+    pkg {
+        repo = 'gradle-plugins'
+        name = 'gradle-java2html-plugin'
+        licenses = ['Apache-2.0']
     }
 }

@@ -14,17 +14,17 @@ To use the Java2HTML plugin, include in your build script:
     apply plugin: 'java2html'
 
 The plugin JAR needs to be defined in the classpath of your build script. It is directly available on
-[Maven Central](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.gradle.api.plugins%22%20AND%20a%3A%22gradle-java2html-plugin%22).
+[Bintray](https://bintray.com/bmuschko/gradle-plugins/gradle-java2html-plugin).
 Alternatively, you can download it from GitHub and deploy it to your local repository. The following code snippet shows an
-example on how to retrieve it from Maven Central:
+example on how to retrieve it from Bintray:
 
     buildscript {
         repositories {
-            mavenCentral()
+            jcenter()
         }
 
         dependencies {
-            classpath 'org.gradle.api.plugins:gradle-java2html-plugin:0.3'
+            classpath 'org.gradle.api.plugins:gradle-java2html-plugin:0.4'
         }
     }
 
