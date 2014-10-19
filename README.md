@@ -11,10 +11,10 @@ plugin.
 
 To use the Java2HTML plugin, include in your build script:
 
-    apply plugin: 'java2html'
+    apply plugin: 'com.bmuschko.java2html'
 
 The plugin JAR needs to be defined in the classpath of your build script. It is directly available on
-[Bintray](https://bintray.com/bmuschko/gradle-plugins/gradle-java2html-plugin).
+[Bintray](https://bintray.com/bmuschko/gradle-plugins/com.bmuschko%3Agradle-java2html-plugin).
 Alternatively, you can download it from GitHub and deploy it to your local repository. The following code snippet shows an
 example on how to retrieve it from Bintray:
 
@@ -24,7 +24,7 @@ example on how to retrieve it from Bintray:
         }
 
         dependencies {
-            classpath 'org.gradle.api.plugins:gradle-java2html-plugin:0.4'
+            classpath 'com.bmuschko:gradle-java2html-plugin:2.0'
         }
     }
 
@@ -41,7 +41,7 @@ The Java2HTML plugin defines the following tasks:
 * `java2htmlConvertCode`: Converts source code files to Java2HTML documentation.
 * `java2htmlGenerateOverview`: Generates HTML overview files for Java2HTML documentation.
 
-## Convention properties
+## Extension properties
 
 The Java2HTML plugin defines the following convention properties in the `java2html` closure. This closure itself contains
 two closures for each of the tasks: `conversion` and `overview`.

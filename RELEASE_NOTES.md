@@ -1,3 +1,10 @@
+### Version 2.0 (October 18, 2014)
+
+* Upgrade to Gradle Wrapper 2.1.
+* Changed package name to `com.bmuschko.gradle.java2html`.
+* Changed group ID to `com.bmuschko`.
+* Adapted plugin IDs to be compatible with Gradle's plugin portal.
+
 ### Version 0.4 (October 20, 2013)
 
 * Fix path separation on Windows - [Issue 8](https://github.com/bmuschko/gradle-java2html-plugin/pull/3).

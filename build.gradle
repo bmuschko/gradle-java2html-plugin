@@ -1,23 +1,20 @@
 buildscript {
     repositories {
-        mavenCentral()
-        maven { url 'http://jcenter.bintray.com' }
+        jcenter()
     }
 
     dependencies {
-        classpath 'org.gradle.api.plugins:gradle-java2html-plugin:0.3'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.3'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
     }
 }
 
 apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
-apply plugin: 'bintray'
-apply plugin: 'java2html'
+apply plugin: 'com.jfrog.bintray'
 
-group = 'org.gradle.api.plugins'
-version = '0.4'
+group = 'com.bmuschko'
+version = '2.0'
 
 repositories {
     mavenCentral()
@@ -27,27 +24,6 @@ dependencies {
     compile localGroovy()
     compile gradleApi()
     testCompile 'junit:junit:4.11'
-    java2html 'de.java2html:java2html:5.0'
-}
-
-java2html {
-    conversion {
-        tabs = 4
-        style = 'eclipse'
-        outputFormat = 'html'
-        showLineNumbers = true
-        addLineAnchors = true
-        showFileName = true
-        useShortFileName = true
-        overwrite = true
-        showDefaultTitle = true
-        includeDocumentHeader = true
-        includeDocumentFooter = true
-    }
-
-    overview {
-        docDescription = 'Gradle plugin for turning source code into HTML, RTF, TeX and XHTML using Java2HTML.'
-    }
 }
 
 jar {
@@ -92,7 +68,7 @@ idea.project {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.7'
+    gradleVersion = '2.1'
 }
 
 publishing {
@@ -136,7 +112,23 @@ bintray {
 
     pkg {
         repo = 'gradle-plugins'
-        name = 'gradle-java2html-plugin'
+        name = 'com.bmuschko:gradle-java2html-plugin'
+        desc = 'Gradle plugin for turning source code into HTML, RTF, TeX and XHTML using Java2HTML.'
+        websiteUrl = "https://github.com/bmuschko/${project.name}"
+        issueTrackerUrl = "https://github.com/bmuschko/${project.name}/issues"
+        vcsUrl = "https://github.com/bmuschko/${project.name}.git"
         licenses = ['Apache-2.0']
+        labels = ['gradle', 'source', 'code', 'html', 'rtf', 'tex', 'xhtml', 'transform', 'documentation']
+        publicDownloadNumbers = true
+
+        version {
+            vcsTag = "v$project.version"
+            attributes = ['gradle-plugin': "com.bmuschko.java2html:${project.group}:${project.name}"]
+
+            gpg {
+                sign = true
+                passphrase = project.hasProperty('gpgPassphrase') ? project.getProperty('gpgPassphrase') : null
+            }
+        }
     }
 }

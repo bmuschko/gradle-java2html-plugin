@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gradle.api.plugins.java2html.internal.model
+package com.bmuschko.gradle.java2html.internal.model
 
 /**
- * Document class model.
+ * Document package model.
  *
  * @author Benjamin Muschko
  */
-class DocClass implements Comparable {
+class DocPackage implements Comparable {
     String link
     String name
 
@@ -30,10 +30,31 @@ class DocClass implements Comparable {
     }
 
     @Override
+    boolean equals(o) {
+        if (this.is(o)) return true
+        if (getClass() != o.class) return false
+
+        DocPackage that = (DocPackage) o
+
+        if (link != that.link) return false
+        if (name != that.name) return false
+
+        true
+    }
+
+    @Override
+    int hashCode() {
+        int result
+        result = (link != null ? link.hashCode() : 0)
+        result = 31 * result + (name != null ? name.hashCode() : 0)
+        result
+    }
+
+    @Override
     String toString() {
-        "DocClass{" +
-                "link='" + link + '\'' +
-                ", name='" + name + '\'' +
-                '}'
+        "DocPackage{" +
+        "link='" + link + '\'' +
+        ", name='" + name + '\'' +
+        '}'
     }
 }

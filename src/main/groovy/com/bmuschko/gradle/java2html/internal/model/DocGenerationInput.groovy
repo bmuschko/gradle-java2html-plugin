@@ -13,20 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gradle.api.plugins.java2html.internal
+package com.bmuschko.gradle.java2html.internal.model
+
+import org.gradle.api.file.FileCollection
 
 /**
- * Document file enums.
+ * Document generation input model.
  *
  * @author Benjamin Muschko
  */
-enum DocFile {
-    INDEX('index.html'), OVERVIEW_FRAME('overview-frame.html'), ALLCLASSES_FRAME('allclasses-frame.html'), OVERVIEW_SUMMARY('overview-summary.html'),
-    PACKAGE_FRAME('package-frame.html'), STYLESHEET('stylesheet.css'), ICON('doc.ico')
-
-    final String filename
-
-    private DocFile(String filename) {
-        this.filename = filename
-    }
+class DocGenerationInput {
+    FileCollection srcDirs
+    File destDir
+    String pattern
+    String windowTitle
+    String docTitle
+    String docDescription
+    File icon
+    File stylesheet
 }

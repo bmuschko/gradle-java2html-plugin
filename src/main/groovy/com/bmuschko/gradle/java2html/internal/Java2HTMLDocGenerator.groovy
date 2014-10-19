@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gradle.api.plugins.java2html.internal
+package com.bmuschko.gradle.java2html.internal
 
+import com.bmuschko.gradle.java2html.internal.model.DocClass
+import com.bmuschko.gradle.java2html.internal.model.DocGenerationInput
+import com.bmuschko.gradle.java2html.internal.model.DocPackage
 import groovy.text.SimpleTemplateEngine
 import groovy.text.TemplateEngine
 import groovy.util.logging.Slf4j
 import org.gradle.api.GradleException
-import org.gradle.api.plugins.java2html.internal.model.DocClass
-import org.gradle.api.plugins.java2html.internal.model.DocGenerationInput
-import org.gradle.api.plugins.java2html.internal.model.DocPackage
 
 /**
  * Java2HTML document generator.

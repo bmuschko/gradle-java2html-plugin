@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gradle.api.plugins.java2html
+package com.bmuschko.gradle.java2html
 
+import com.bmuschko.gradle.java2html.internal.Java2HTMLDocGenerator
+import com.bmuschko.gradle.java2html.internal.model.DocGenerationInput
 import groovy.util.logging.Slf4j
 import org.gradle.api.DefaultTask
-import org.gradle.api.plugins.java2html.internal.Java2HTMLDocGenerator
-import org.gradle.api.plugins.java2html.internal.model.DocGenerationInput
-import org.gradle.api.tasks.*
 import org.gradle.api.file.FileCollection
+import org.gradle.api.tasks.*
 
 /**
  * Java2HTML overview generation task.

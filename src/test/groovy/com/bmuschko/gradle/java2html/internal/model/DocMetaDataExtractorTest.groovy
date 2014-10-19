@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gradle.api.plugins.java2html.internal.model
+package com.bmuschko.gradle.java2html.internal.model
 
 import groovy.mock.interceptor.MockFor
 import org.gradle.api.file.FileCollection
-import org.gradle.api.plugins.java2html.internal.DocMetaDataExtractor
+import com.bmuschko.gradle.java2html.internal.DocMetaDataExtractor
 import org.junit.Test
 
 import java.lang.reflect.Field

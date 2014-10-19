@@ -13,28 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gradle.api.plugins.java2html
+package com.bmuschko.gradle.java2html
 
-import org.gradle.util.ConfigureUtil
+import org.gradle.api.file.FileCollection
 
 /**
- * Java2HTML plugin convention.
+ * Overview convention.
  *
  * @author Benjamin Muschko
  */
-class Java2HTMLPluginConvention {
-    ConversionConvention conversion = new ConversionConvention()
-    OverviewConvention overview = new OverviewConvention()
-
-    def java2html(Closure closure) {
-        ConfigureUtil.configure(closure, this)
-    }
-
-    def conversion(Closure closure) {
-        ConfigureUtil.configure(closure, conversion)
-    }
-
-    def overview(Closure closure) {
-        ConfigureUtil.configure(closure, overview)
-    }
+class OverviewConvention {
+    FileCollection srcDirs
+    File destDir
+    String pattern
+    String windowTitle
+    String docTitle
+    String docDescription
+    File icon
+    File stylesheet
 }

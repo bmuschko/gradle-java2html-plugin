@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.gradle.api.plugins.java2html
+package com.bmuschko.gradle.java2html
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -41,33 +41,32 @@ class Java2HTMLPlugin implements Plugin<Project> {
         project.configurations.create(CONFIGURATION_NAME).setVisible(false).setTransitive(true)
                .setDescription('The Java2HTML library to be used for this project.')
 
-        Java2HTMLPluginConvention java2HTMLPluginConvention = new Java2HTMLPluginConvention()
-        project.convention.plugins.java2html = java2HTMLPluginConvention
+        Java2HTMLPluginExtension extension = project.extensions.create('java2html', Java2HTMLPluginExtension)
 
-        configureConvertCodeTask(project, java2HTMLPluginConvention)
-        configureGenerateOverviewTask(project, java2HTMLPluginConvention)
+        configureConvertCodeTask(project, extension)
+        configureGenerateOverviewTask(project, extension)
     }
 
-    private void configureConvertCodeTask(Project project, Java2HTMLPluginConvention java2HTMLPluginConvention) {
+    private void configureConvertCodeTask(Project project, Java2HTMLPluginExtension extension) {
         project.tasks.withType(ConvertCodeTask).whenTaskAdded { ConvertCodeTask convertCodeTask ->
             convertCodeTask.conventionMapping.map('classpath') { project.configurations.getByName(CONFIGURATION_NAME).asFileTree }
-            convertCodeTask.conventionMapping.map('srcDirs') { java2HTMLPluginConvention.conversion.srcDirs ?: getSrcDirs(project) }
-            convertCodeTask.conventionMapping.map('destDir') { getReportDirectory(project, java2HTMLPluginConvention.conversion.destDir) }
-            convertCodeTask.conventionMapping.map('includes') { java2HTMLPluginConvention.conversion.includes ?: getDefaultIncludes() }
-            convertCodeTask.conventionMapping.map('outputFormat') { java2HTMLPluginConvention.conversion.outputFormat ?: 'html' }
-            convertCodeTask.conventionMapping.map('tabs') { java2HTMLPluginConvention.conversion.tabs ?: 2 }
-            convertCodeTask.conventionMapping.map('style') { java2HTMLPluginConvention.conversion.style ?: 'eclipse' }
-            convertCodeTask.conventionMapping.map('showLineNumbers') { java2HTMLPluginConvention.conversion.showLineNumbers ?: true }
-            convertCodeTask.conventionMapping.map('showFileName') { java2HTMLPluginConvention.conversion.showFileName ?: false }
-            convertCodeTask.conventionMapping.map('showDefaultTitle') { java2HTMLPluginConvention.conversion.showDefaultTitle ?: false }
-            convertCodeTask.conventionMapping.map('showTableBorder') { java2HTMLPluginConvention.conversion.showTableBorder ?: false }
-            convertCodeTask.conventionMapping.map('includeDocumentHeader') { java2HTMLPluginConvention.conversion.includeDocumentHeader ?: true }
-            convertCodeTask.conventionMapping.map('includeDocumentFooter') { java2HTMLPluginConvention.conversion.includeDocumentFooter ?: true }
-            convertCodeTask.conventionMapping.map('addLineAnchors') { java2HTMLPluginConvention.conversion.addLineAnchors ?: false }
-            convertCodeTask.conventionMapping.map('lineAnchorPrefix') { java2HTMLPluginConvention.conversion.lineAnchorPrefix ?: '' }
-            convertCodeTask.conventionMapping.map('horizontalAlignment') { java2HTMLPluginConvention.conversion.horizontalAlignment ?: 'left' }
-            convertCodeTask.conventionMapping.map('useShortFileName') { java2HTMLPluginConvention.conversion.useShortFileName ?: false }
-            convertCodeTask.conventionMapping.map('overwrite') { java2HTMLPluginConvention.conversion.overwrite ?: false }
+            convertCodeTask.conventionMapping.map('srcDirs') { extension.conversion.srcDirs ?: getSrcDirs(project) }
+            convertCodeTask.conventionMapping.map('destDir') { getReportDirectory(project, extension.conversion.destDir) }
+            convertCodeTask.conventionMapping.map('includes') { extension.conversion.includes ?: getDefaultIncludes() }
+            convertCodeTask.conventionMapping.map('outputFormat') { extension.conversion.outputFormat ?: 'html' }
+            convertCodeTask.conventionMapping.map('tabs') { extension.conversion.tabs ?: 2 }
+            convertCodeTask.conventionMapping.map('style') { extension.conversion.style ?: 'eclipse' }
+            convertCodeTask.conventionMapping.map('showLineNumbers') { extension.conversion.showLineNumbers ?: true }
+            convertCodeTask.conventionMapping.map('showFileName') { extension.conversion.showFileName ?: false }
+            convertCodeTask.conventionMapping.map('showDefaultTitle') { extension.conversion.showDefaultTitle ?: false }
+            convertCodeTask.conventionMapping.map('showTableBorder') { extension.conversion.showTableBorder ?: false }
+            convertCodeTask.conventionMapping.map('includeDocumentHeader') { extension.conversion.includeDocumentHeader ?: true }
+            convertCodeTask.conventionMapping.map('includeDocumentFooter') { extension.conversion.includeDocumentFooter ?: true }
+            convertCodeTask.conventionMapping.map('addLineAnchors') { extension.conversion.addLineAnchors ?: false }
+            convertCodeTask.conventionMapping.map('lineAnchorPrefix') { extension.conversion.lineAnchorPrefix ?: '' }
+            convertCodeTask.conventionMapping.map('horizontalAlignment') { extension.conversion.horizontalAlignment ?: 'left' }
+            convertCodeTask.conventionMapping.map('useShortFileName') { extension.conversion.useShortFileName ?: false }
+            convertCodeTask.conventionMapping.map('overwrite') { extension.conversion.overwrite ?: false }
         }
 
         ConvertCodeTask convertCodeTask = project.tasks.create(CONVERT_CODE_TASK_NAME, ConvertCodeTask)
@@ -75,16 +74,16 @@ class Java2HTMLPlugin implements Plugin<Project> {
         convertCodeTask.group = DOCUMENTATION_GROUP
     }
 
-    private void configureGenerateOverviewTask(Project project, Java2HTMLPluginConvention java2HTMLPluginConvention) {
+    private void configureGenerateOverviewTask(Project project, Java2HTMLPluginExtension extension) {
         project.tasks.withType(GenerateOverviewTask).whenTaskAdded { GenerateOverviewTask generateOverviewTask ->
-            generateOverviewTask.conventionMapping.map('srcDirs') { java2HTMLPluginConvention.overview.srcDirs ?: getOverviewSourceDirectories(project, java2HTMLPluginConvention.conversion.destDir) }
-            generateOverviewTask.conventionMapping.map('destDir') { getReportDirectory(project, java2HTMLPluginConvention.overview.destDir) }
-            generateOverviewTask.conventionMapping.map('pattern') { java2HTMLPluginConvention.overview.pattern ?: '**/*.html' }
-            generateOverviewTask.conventionMapping.map('windowTitle') { java2HTMLPluginConvention.overview.windowTitle ?: project.name }
-            generateOverviewTask.conventionMapping.map('docTitle') { java2HTMLPluginConvention.overview.docTitle ?: project.name }
-            generateOverviewTask.conventionMapping.map('docDescription') { java2HTMLPluginConvention.overview.docDescription }
-            generateOverviewTask.conventionMapping.map('icon') { java2HTMLPluginConvention.overview.icon }
-            generateOverviewTask.conventionMapping.map('stylesheet') { java2HTMLPluginConvention.overview.stylesheet }
+            generateOverviewTask.conventionMapping.map('srcDirs') { extension.overview.srcDirs ?: getOverviewSourceDirectories(project, extension.conversion.destDir) }
+            generateOverviewTask.conventionMapping.map('destDir') { getReportDirectory(project, extension.overview.destDir) }
+            generateOverviewTask.conventionMapping.map('pattern') { extension.overview.pattern ?: '**/*.html' }
+            generateOverviewTask.conventionMapping.map('windowTitle') { extension.overview.windowTitle ?: project.name }
+            generateOverviewTask.conventionMapping.map('docTitle') { extension.overview.docTitle ?: project.name }
+            generateOverviewTask.conventionMapping.map('docDescription') { extension.overview.docDescription }
+            generateOverviewTask.conventionMapping.map('icon') { extension.overview.icon }
+            generateOverviewTask.conventionMapping.map('stylesheet') { extension.overview.stylesheet }
         }
 
         project.afterEvaluate {
