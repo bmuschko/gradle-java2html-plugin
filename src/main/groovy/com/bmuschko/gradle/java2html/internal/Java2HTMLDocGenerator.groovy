@@ -111,7 +111,10 @@ class Java2HTMLDocGenerator {
      */
     private void generatePackageFrameFiles(List<DocPackage> docPackages, List<DocClass> docClasses) {
         docPackages.each { docPackage ->
-            List<DocClass> docClassesInPackage = docClasses.findAll { it.link.substring(0, it.link.lastIndexOf(FILE_SEPARATOR)) == docPackage.link }
+            List<DocClass> docClassesInPackage = docClasses.findAll { docClass ->
+                int indexOfFileSeparator = docClass.link.lastIndexOf(FILE_SEPARATOR)
+                docPackage.link == (indexOfFileSeparator > -1 ? docClass.link.substring(0, indexOfFileSeparator) : '')
+            }
             def binding = ['docTitle': docGenerationInput.docTitle, 'packageName': docPackage.name, 'classes': docClassesInPackage]
             generateTemplateFile("${docGenerationInput.destDir.absolutePath}/${docPackage.link}", DocFile.PACKAGE_FRAME.filename, binding)
         }
