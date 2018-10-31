@@ -102,7 +102,8 @@ class DocMetaDataExtractorTest {
         def htmlFileNames = [
             "C:\\Users\\Jocki Hendry\\project name\\build\\java2html\\griffon\\app\\AbstractSyntheticMetaMethods.html",
             "C:\\Users\\Jocki Hendry\\project name\\build\\java2html\\griffon\\application\\StandaloneGriffonApplication.html",
-            "C:\\Users\\Jocki Hendry\\project name\\build\\java2html\\griffon\\core\\AddonManager.html"
+            "C:\\Users\\Jocki Hendry\\project name\\build\\java2html\\griffon\\core\\AddonManager.html",
+            "C:\\Users\\Jocki Hendry\\project name\\build\\java2html\\module-info.html"
         ]
 
         def fileMock = new MockFor(File)
@@ -114,7 +115,7 @@ class DocMetaDataExtractorTest {
             File srcFile = new File("")
             def fileCollectionMock = new MockFor(FileCollection)
 
-            fileCollectionMock.demand.find(3) {
+            fileCollectionMock.demand.find(4) {
                 srcFile.toString()
             }
 
@@ -124,12 +125,14 @@ class DocMetaDataExtractorTest {
             changeFileSeparator('\\')
             def results = docMetaDataExtractor.getPackages(htmlFileNames, fileCollection)
 
-            assert "griffon.app" == results[0].name
-            assert "griffon\\app" == results[0].link
-            assert "griffon.application" == results[1].name
-            assert "griffon\\application" == results[1].link
-            assert "griffon.core" == results[2].name
-            assert "griffon\\core" == results[2].link
+            assert "" == results[0].name
+            assert "" == results[0].link
+            assert "griffon.app" == results[1].name
+            assert "griffon\\app" == results[1].link
+            assert "griffon.application" == results[2].name
+            assert "griffon\\application" == results[2].link
+            assert "griffon.core" == results[3].name
+            assert "griffon\\core" == results[3].link
         }
     }
 
@@ -138,7 +141,8 @@ class DocMetaDataExtractorTest {
         def htmlFileNames = [
             "/home/jocki/project/build/java2html/griffon/app/AbstractSyntheticMetaMethods.html",
             "/home/jocki/project/build/java2html/griffon/application/StandaloneGriffonApplication.html",
-            "/home/jocki/project/build/java2html/griffon/core/AddonManager.html"
+            "/home/jocki/project/build/java2html/griffon/core/AddonManager.html",
+            "/home/jocki/project/build/java2html/module-info.html"
         ]
 
         def fileMock = new MockFor(File)
@@ -150,7 +154,7 @@ class DocMetaDataExtractorTest {
             File srcFile = new File("")
             def fileCollectionMock = new MockFor(FileCollection)
 
-            fileCollectionMock.demand.find(3) {
+            fileCollectionMock.demand.find(4) {
                 srcFile.toString()
             }
 
@@ -160,12 +164,14 @@ class DocMetaDataExtractorTest {
             changeFileSeparator('/')
             def results = docMetaDataExtractor.getPackages(htmlFileNames, fileCollection)
 
-            assert "griffon.app" == results[0].name
-            assert "griffon/app" == results[0].link
-            assert "griffon.application" == results[1].name
-            assert "griffon/application" == results[1].link
-            assert "griffon.core" == results[2].name
-            assert "griffon/core" == results[2].link
+            assert "" == results[0].name
+            assert "" == results[0].link
+            assert "griffon.app" == results[1].name
+            assert "griffon/app" == results[1].link
+            assert "griffon.application" == results[2].name
+            assert "griffon/application" == results[2].link
+            assert "griffon.core" == results[3].name
+            assert "griffon/core" == results[3].link
         }
 
     }

@@ -58,7 +58,8 @@ class DocMetaDataExtractor {
 
         htmlFilenames.each {
             String relativePathClassFilename = getRelativeClassFilename(it, srcDirs)
-            String packageName = relativePathClassFilename.substring(0, relativePathClassFilename.lastIndexOf(FILE_SEPARATOR))
+            int indexOfFileSeparator = relativePathClassFilename.lastIndexOf(FILE_SEPARATOR)
+            String packageName = indexOfFileSeparator > -1 ? relativePathClassFilename.substring(0, indexOfFileSeparator) : ''
             DocPackage docPackage = new DocPackage(link: packageName, name: packageName.replaceAll(FILE_SEPARATOR.replace("\\", "\\\\"), '.'))
 
             if(!docPackages.contains(docPackage)) {
