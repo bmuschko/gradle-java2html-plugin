@@ -1,4 +1,4 @@
-# Gradle Java2HTML plugin
+# Gradle Java2HTML plugin [![Build Status](https://travis-ci.org/bmuschko/gradle-java2html-plugin.svg?branch=master)](https://travis-ci.org/bmuschko/gradle-java2html-plugin)
 
 ![Java2HTML Logo](http://www.java2html.de/java2html_logo_big.gif)
 
