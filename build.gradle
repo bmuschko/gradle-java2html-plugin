@@ -1,20 +1,12 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:0.6'
-    }
+plugins {
+    id 'groovy'
+    id 'maven-publish'
+    id 'java-gradle-plugin'
+    id 'com.jfrog.bintray' version '1.8.4'
 }
 
-apply plugin: 'groovy'
-apply plugin: 'idea'
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-
 group = 'com.bmuschko'
-version = '2.0'
+version = '2.0.1'
 
 repositories {
     mavenCentral()
@@ -23,7 +15,7 @@ repositories {
 dependencies {
     compile localGroovy()
     compile gradleApi()
-    testCompile 'junit:junit:4.11'
+    testCompile 'junit:junit:4.12'
 }
 
 jar {
@@ -51,24 +43,8 @@ artifacts {
     archives groovydocJar
 }
 
-idea.project {
-    jdkName = '1.6'
-
-    ipr.withXml { provider ->
-        def node = provider.asNode()
-
-        // Use GIT
-        def vcsConfig = node.component.find { it.'@name' == 'VcsDirectoryMappings' }
-        vcsConfig.mapping[0].'@vcs' = 'Git'
-
-        // Set Gradle home
-        def gradleSettings = node.appendNode('component', [name: 'GradleSettings'])
-        gradleSettings.appendNode('option', [name: 'SDK_HOME', value: gradle.gradleHomeDir])
-    }
-}
-
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.1'
+    gradleVersion = '4.10.2'
 }
 
 publishing {
@@ -78,28 +54,30 @@ publishing {
             artifact sourcesJar
             artifact groovydocJar
 
-            pom.withXml {
-                def root = asNode()
-                root.appendNode('name', 'Gradle Java2HTML plugin')
-                root.appendNode('description', 'Gradle plugin for turning source code into HTML, RTF, TeX and XHTML using Java2HTML.')
-                root.appendNode('url', 'https://github.com/bmuschko/gradle-java2html-plugin')
-                root.appendNode('inceptionYear', '2012')
-
-                def scm = root.appendNode('scm')
-                scm.appendNode('url', 'https://github.com/bmuschko/gradle-java2html-plugin')
-                scm.appendNode('connection', 'scm:https://bmuschko@github.com/bmuschko/gradle-java2html-plugin.git')
-                scm.appendNode('developerConnection', 'scm:git://github.com/bmuschko/gradle-java2html-plugin.git')
-
-                def license = root.appendNode('licenses').appendNode('license')
-                license.appendNode('name', 'The Apache Software License, Version 2.0')
-                license.appendNode('url', 'http://www.apache.org/licenses/LICENSE-2.0.txt')
-                license.appendNode('distribution', 'repo')
-
-                def developers = root.appendNode('developers')
-                def bmuschko = developers.appendNode('developer')
-                bmuschko.appendNode('id', 'bmuschko')
-                bmuschko.appendNode('name', 'Benjamin Muschko')
-                bmuschko.appendNode('email', 'benjamin.muschko@gmail.com')
+            pom {
+                name = 'Gradle Java2HTML plugin'
+                description = 'Gradle plugin for turning source code into HTML, RTF, TeX and XHTML using Java2HTML.'
+                url = 'https://github.com/bmuschko/gradle-java2html-plugin'
+                inceptionYear = '2012'
+                licenses {
+                    license {
+                        name = 'The Apache Software License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        distribution = 'repo'
+                    }
+                }
+                scm {
+                    url = 'https://github.com/bmuschko/gradle-java2html-plugin'
+                    connection = 'scm:https://bmuschko@github.com/bmuschko/gradle-java2html-plugin.git'
+                    developerConnection = 'scm:git://github.com/bmuschko/gradle-java2html-plugin.git'
+                }
+                developers {
+                    developer {
+                        id = 'bmuschko'
+                        name = 'Benjamin Muschko'
+                        email = 'benjamin.muschko@gmail.com'
+                    }
+                }
             }
         }
     }
@@ -129,6 +107,15 @@ bintray {
                 sign = true
                 passphrase = project.hasProperty('gpgPassphrase') ? project.getProperty('gpgPassphrase') : null
             }
+        }
+    }
+}
+
+gradlePlugin {
+    plugins {
+        jdepsPlugin {
+            id = 'com.bmuschko.java2html'
+            implementationClass = 'com.bmuschko.gradle.java2html.Java2HTMLPlugin'
         }
     }
 }
