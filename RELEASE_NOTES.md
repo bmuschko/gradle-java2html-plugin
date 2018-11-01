@@ -1,3 +1,8 @@
+### Version 2.0.1 (October 31, 2018)
+
+* Upgrade to Gradle Wrapper 4.10.2.
+* Handle Java files in default package - [Issue 4](https://github.com/bmuschko/gradle-java2html-plugin/issues/4).
+
 ### Version 2.0 (October 18, 2014)
 
 * Upgrade to Gradle Wrapper 2.1.
