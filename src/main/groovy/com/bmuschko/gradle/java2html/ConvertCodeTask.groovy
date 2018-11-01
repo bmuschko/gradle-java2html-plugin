@@ -15,7 +15,7 @@
  */
 package com.bmuschko.gradle.java2html
 
-import groovy.util.logging.Slf4j
+
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.Input
@@ -28,7 +28,6 @@ import org.gradle.api.tasks.TaskAction
  *
  * @author Benjamin Muschko
  */
-@Slf4j
 class ConvertCodeTask extends DefaultTask {
     @InputFiles FileCollection classpath
     @Input FileCollection srcDirs
@@ -55,7 +54,7 @@ class ConvertCodeTask extends DefaultTask {
     }
 
     private void generateReport() {
-        log.info 'Starting to convert source code to Java2HTML documentation.'
+        logger.info 'Starting to convert source code to Java2HTML documentation.'
 
         ant.taskdef(name: 'java2html', classname: 'de.java2html.anttasks.Java2HtmlTask', classpath: getClasspath().asPath)
         getSrcDirs().each { srcDir ->
@@ -66,6 +65,6 @@ class ConvertCodeTask extends DefaultTask {
                           useShortFileName: getUseShortFileName(), overwrite: getOverwrite())
         }
 
-        log.info 'Finished converting source code to Java2HTML documentation.'
+        logger.info 'Finished converting source code to Java2HTML documentation.'
     }
 }

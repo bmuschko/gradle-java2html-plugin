@@ -17,7 +17,6 @@ package com.bmuschko.gradle.java2html
 
 import com.bmuschko.gradle.java2html.internal.Java2HTMLDocGenerator
 import com.bmuschko.gradle.java2html.internal.model.DocGenerationInput
-import groovy.util.logging.Slf4j
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.*
@@ -27,7 +26,6 @@ import org.gradle.api.tasks.*
  *
  * @author Benjamin Muschko
  */
-@Slf4j
 class GenerateOverviewTask extends DefaultTask {
     @Input FileCollection srcDirs
     @OutputDirectory File destDir
@@ -40,7 +38,7 @@ class GenerateOverviewTask extends DefaultTask {
 
     @TaskAction
     void start() {
-        log.info 'Starting to generate Java2HTML overview.'
+        logger.info 'Starting to generate Java2HTML overview.'
 
         // Copy submodule directories
         ant.copy(toDir: getDestDir()) {
@@ -55,6 +53,6 @@ class GenerateOverviewTask extends DefaultTask {
         Java2HTMLDocGenerator docGenerator = new Java2HTMLDocGenerator(input)
         docGenerator.generate()
 
-        log.info 'Finished generating Java2HTML overview.'
+        logger.info 'Finished generating Java2HTML overview.'
     }
 }
