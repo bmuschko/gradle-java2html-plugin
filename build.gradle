@@ -1,18 +1,9 @@
 plugins {
     id 'groovy'
-    id 'idea'
     id 'maven-publish'
     id 'java-gradle-plugin'
-    id 'com.jfrog.bintray'              version '1.8.4'
-    id 'net.nemerosa.versioning'        version '2.7.1'
-    id 'com.github.ben-manes.versions'  version '0.20.0'
-    id 'com.gradle.plugin-publish'      version '0.10.0'
+    id 'com.jfrog.bintray' version '1.8.4'
 }
-
-apply plugin: 'groovy'
-apply plugin: 'idea'
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
 
 group = 'com.bmuschko'
 version = '2.0.1'
@@ -50,22 +41,6 @@ task groovydocJar(type: Jar, dependsOn: groovydoc) {
 artifacts {
     archives sourcesJar
     archives groovydocJar
-}
-
-idea.project {
-    jdkName = '1.7'
-
-    ipr.withXml { provider ->
-        def node = provider.asNode()
-
-        // Use GIT
-        def vcsConfig = node.component.find { it.'@name' == 'VcsDirectoryMappings' }
-        vcsConfig.mapping[0].'@vcs' = 'Git'
-
-        // Set Gradle home
-        def gradleSettings = node.appendNode('component', [name: 'GradleSettings'])
-        gradleSettings.appendNode('option', [name: 'SDK_HOME', value: gradle.gradleHomeDir])
-    }
 }
 
 task wrapper(type: Wrapper) {
@@ -142,25 +117,5 @@ gradlePlugin {
             id = 'com.bmuschko.java2html'
             implementationClass = 'com.bmuschko.gradle.java2html.Java2HTMLPlugin'
         }
-    }
-}
-
-pluginBundle {
-    website = 'https://github.com/bmuschko/gradle-java2html-plugin'
-    vcsUrl = 'https://github.com/bmuschko/gradle-java2html-plugin'
-    description = 'Gradle plugin for turning source code into HTML, RTF, TeX and XHTML using Java2HTML.'
-    tags = ['gradle', 'source', 'code', 'html', 'rtf', 'tex', 'xhtml', 'transform', 'documentation']
-
-    plugins {
-        jdepsPlugin {
-            id = 'com.bmuschko.java2html'
-            displayName = 'Gradle Java2HTML plugin'
-        }
-    }
-
-    mavenCoordinates {
-        groupId = project.group
-        artifactId = project.name
-        version = project.version
     }
 }
