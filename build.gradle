@@ -110,7 +110,7 @@ bintray {
 
 gradlePlugin {
     plugins {
-        jdepsPlugin {
+        java2HtmlPlugin {
             id = 'com.bmuschko.java2html'
             implementationClass = 'com.bmuschko.gradle.java2html.Java2HTMLPlugin'
         }
