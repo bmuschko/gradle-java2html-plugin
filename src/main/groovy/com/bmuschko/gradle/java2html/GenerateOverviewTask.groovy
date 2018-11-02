@@ -26,14 +26,23 @@ import org.gradle.api.tasks.*
  *
  * @author Benjamin Muschko
  */
+@CacheableTask
 class GenerateOverviewTask extends DefaultTask {
+    @PathSensitive(PathSensitivity.RELATIVE)
     @InputFiles FileCollection srcDirs
+
+    @PathSensitive(PathSensitivity.RELATIVE)
     @OutputDirectory File destDir
-    @Input String pattern
-    @Input String windowTitle
-    @Input String docTitle
-    @Input String docDescription
+
+    @Input @Optional String pattern
+    @Input @Optional String windowTitle
+    @Input @Optional String docTitle
+    @Input @Optional String docDescription
+
+    @PathSensitive(PathSensitivity.RELATIVE)
     @InputFile @Optional File icon
+
+    @PathSensitive(PathSensitivity.RELATIVE)
     @InputFile @Optional File stylesheet
 
     @TaskAction
