@@ -27,12 +27,12 @@ import org.gradle.api.tasks.*
  * @author Benjamin Muschko
  */
 class GenerateOverviewTask extends DefaultTask {
-    @Input FileCollection srcDirs
+    @InputFiles FileCollection srcDirs
     @OutputDirectory File destDir
-    String pattern
-    String windowTitle
-    String docTitle
-    String docDescription
+    @Input String pattern
+    @Input String windowTitle
+    @Input String docTitle
+    @Input String docDescription
     @InputFile @Optional File icon
     @InputFile @Optional File stylesheet
 

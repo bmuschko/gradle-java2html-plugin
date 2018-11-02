@@ -30,23 +30,23 @@ import org.gradle.api.tasks.TaskAction
  */
 class ConvertCodeTask extends DefaultTask {
     @InputFiles FileCollection classpath
-    @Input FileCollection srcDirs
+    @InputFiles FileCollection srcDirs
     @OutputDirectory File destDir
     @Input String includes
-    String outputFormat
-    Integer tabs
-    String style
-    Boolean showLineNumbers
-    Boolean showFileName
-    Boolean showDefaultTitle
-    Boolean showTableBorder
-    Boolean includeDocumentHeader
-    Boolean includeDocumentFooter
-    Boolean addLineAnchors
-    String lineAnchorPrefix
-    String horizontalAlignment
-    Boolean useShortFileName
-    Boolean overwrite
+    @Input String outputFormat
+    @Input Integer tabs
+    @Input String style
+    @Input Boolean showLineNumbers
+    @Input Boolean showFileName
+    @Input Boolean showDefaultTitle
+    @Input Boolean showTableBorder
+    @Input Boolean includeDocumentHeader
+    @Input Boolean includeDocumentFooter
+    @Input Boolean addLineAnchors
+    @Input String lineAnchorPrefix
+    @Input String horizontalAlignment
+    @Input Boolean useShortFileName
+    @Input Boolean overwrite
 
     @TaskAction
     void start() {
