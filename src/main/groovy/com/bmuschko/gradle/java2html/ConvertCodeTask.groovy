@@ -21,7 +21,6 @@ import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
@@ -34,6 +33,7 @@ import org.gradle.api.tasks.TaskAction
  */
 @CacheableTask
 class ConvertCodeTask extends DefaultTask {
+    @PathSensitive(PathSensitivity.RELATIVE)
     @Classpath FileCollection classpath
 
     @PathSensitive(PathSensitivity.RELATIVE)
@@ -43,20 +43,20 @@ class ConvertCodeTask extends DefaultTask {
     @OutputDirectory File destDir
 
     @Input String includes
-    @Input @Optional String outputFormat
-    @Input @Optional Integer tabs
-    @Input @Optional String style
-    @Input @Optional Boolean showLineNumbers
-    @Input @Optional Boolean showFileName
-    @Input @Optional Boolean showDefaultTitle
-    @Input @Optional Boolean showTableBorder
-    @Input @Optional Boolean includeDocumentHeader
-    @Input @Optional Boolean includeDocumentFooter
-    @Input @Optional Boolean addLineAnchors
-    @Input @Optional String lineAnchorPrefix
-    @Input @Optional String horizontalAlignment
-    @Input @Optional Boolean useShortFileName
-    @Input @Optional Boolean overwrite
+    @Input String outputFormat
+    @Input Integer tabs
+    @Input String style
+    @Input Boolean showLineNumbers
+    @Input Boolean showFileName
+    @Input Boolean showDefaultTitle
+    @Input Boolean showTableBorder
+    @Input Boolean includeDocumentHeader
+    @Input Boolean includeDocumentFooter
+    @Input Boolean addLineAnchors
+    @Input String lineAnchorPrefix
+    @Input String horizontalAlignment
+    @Input Boolean useShortFileName
+    @Input Boolean overwrite
 
     @TaskAction
     void start() {
