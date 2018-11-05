@@ -1,3 +1,7 @@
+### Version 2.0.2 (November 4, 2018)
+
+* Annotate task properties enable incremenal build functionality/cacheability  - [Pull request 7](https://github.com/bmuschko/gradle-java2html-plugin/pull/7).
+
 ### Version 2.0.1 (October 31, 2018)
 
 * Upgrade to Gradle Wrapper 4.10.2.
