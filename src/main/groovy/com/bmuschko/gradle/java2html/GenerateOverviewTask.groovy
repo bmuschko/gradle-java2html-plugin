@@ -19,21 +19,38 @@ import com.bmuschko.gradle.java2html.internal.Java2HTMLDocGenerator
 import com.bmuschko.gradle.java2html.internal.model.DocGenerationInput
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
-import org.gradle.api.tasks.*
+import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.TaskAction
 
 /**
  * Java2HTML overview generation task.
  *
  * @author Benjamin Muschko
  */
+@CacheableTask
 class GenerateOverviewTask extends DefaultTask {
-    @Input FileCollection srcDirs
+    @PathSensitive(PathSensitivity.RELATIVE)
+    @InputFiles FileCollection srcDirs
+
+    @PathSensitive(PathSensitivity.RELATIVE)
     @OutputDirectory File destDir
-    String pattern
-    String windowTitle
-    String docTitle
-    String docDescription
+
+    @Input String pattern
+    @Input String windowTitle
+    @Input String docTitle
+    @Input String docDescription
+
+    @PathSensitive(PathSensitivity.RELATIVE)
     @InputFile @Optional File icon
+
+    @PathSensitive(PathSensitivity.RELATIVE)
     @InputFile @Optional File stylesheet
 
     @TaskAction
